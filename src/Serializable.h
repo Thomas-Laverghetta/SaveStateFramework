@@ -50,7 +50,7 @@ public:
     virtual void OnLoad(std::ifstream& file) = 0;
 
 	// Get clone function
-    virtual Serializable* clone() = 0;
+    //virtual Serializable* clone() = 0;
     
     template <class T>
     class PointerObj{
@@ -76,12 +76,12 @@ public:
         PointerObj& operator=(T * s){
             if (m_pt = nullptr){
                 // Registering with pointer map
-                SerializationManager::GetSingleton().RegisterPointer(m_PtID, (Serializable*)s->GetObjectID(), this);
+                SerializationManager::GetInstance()->RegisterPointer(m_PtID, (Serializable*)s->GetObjectID(), this);
             }
             else {
                 // remove the previous pointer data
-                SerializationManager::GetSingleton().RemovePointer(m_PtID);
-                SerializationManager::GetSingleton().RegisterPointer(m_PtID, (Serializable*)s->GetObjectID(), this);
+                SerializationManager::GetInstance()->RemovePointer(m_PtID);
+                SerializationManager::GetInstance()->RegisterPointer(m_PtID, (Serializable*)s->GetObjectID(), this);
             }
             
             // setting
@@ -104,4 +104,7 @@ public:
         }
     };
 };
+
+template <class T>
+unsigned int Serializable::PointerObj<T>::m_numPtr = 0;
 #endif //TESTER_SERIALIZABLE_H

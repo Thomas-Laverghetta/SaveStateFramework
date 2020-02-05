@@ -9,49 +9,50 @@ using namespace std;
 //------------------------------------------------------------------------------
 LinkedList::Node::Node() {
     data = Student();
-    this->next.pt = nullptr;
-    CloneRegistration();
+    this->next.m_pt = nullptr;
+    ///CloneRegistration();
 }
 
 //------------------------------------------------------------------------------
 LinkedList::Node::Node(Student s) {
     data = s;
-    this->next.pt = nullptr;
-    CloneRegistration();
+    this->next.m_pt = nullptr;
+    //CloneRegistration();
 }
 
 //------------------------------------------------------------------------------
 LinkedList::LinkedList() {
-    this->head.pt = nullptr;
-    this->tail.pt = nullptr;
+    this->head.m_pt = nullptr;
+    this->tail.m_pt = nullptr;
     this->capacity = 10;
     this->occupied = 0;
-    CloneRegistration();
+    //CloneRegistration();
 }
 
 //------------------------------------------------------------------------------
 LinkedList::LinkedList(int n) {
-    this->head.pt = nullptr;
-    this->tail.pt = nullptr;
+    this->head.m_pt = nullptr;
+    this->tail.m_pt = nullptr;
     this->capacity = n;
     this->occupied = 0;
-    CloneRegistration();
+    //CloneRegistration();
 }
 
 //------------------------------------------------------------------------------
 LinkedList::LinkedList(const LinkedList& src) {
-    this->head.pt = nullptr;
-    this->tail.pt = nullptr;
+    this->head.m_pt = nullptr;
+    this->tail.m_pt = nullptr;
     this->capacity = src.capacity;
     this->occupied = 0;
 
-    Node* srcIt = src.head.pt;
+    Node* srcIt;
+    srcIt = src.head.m_pt;
 
     while (srcIt != nullptr) {
         this->addStudent(srcIt->data);
-        srcIt = srcIt->next.pt;
+        srcIt = srcIt->next.m_pt;
     }
-    CloneRegistration();
+    //CloneRegistration();
 }
 
 //------------------------------------------------------------------------------
@@ -61,7 +62,7 @@ LinkedList::~LinkedList() {
     Node* to_delete = nullptr;
 
     // set current ptr to head ptr
-    current = this->head.pt;
+    current = this->head.m_pt;
 
     // while loop to delete each itemStack in inventory
     while (current != nullptr) {
@@ -69,7 +70,7 @@ LinkedList::~LinkedList() {
         to_delete = current;
 
         // moves current to next Node
-        current = current->next.pt;
+        current = current->next.m_pt;
 
         // deletes to_delete Node
         delete to_delete;
@@ -83,8 +84,8 @@ LinkedList::~LinkedList() {
     //std::cerr << "Deleted Inventory" << "\n";
 
     // sets all private members to null
-    this->head.pt = nullptr;
-    this->tail.pt = nullptr;
+    this->head.m_pt = nullptr;
+    this->tail.m_pt = nullptr;
     this->capacity = 0;
     this->occupied = 0;
 }
@@ -99,14 +100,14 @@ void LinkedList::addStudent(Student student) {
     new_node = new Node(student);
 
     if (this->occupied == 0) {
-        this->head = (Serializable*)new_node; this->head.pt = new_node;
-        this->tail = (Serializable*)new_node; this->tail.pt = new_node;
+        this->head = new_node; this->head.m_pt = new_node;
+        this->tail = new_node; this->tail.m_pt = new_node;
     }
 
     else {
         if (!isFull()) {
-            (this->tail.pt)->next = (Serializable* )new_node;(this->tail.pt)->next.pt = new_node;
-            this->tail = (Serializable*)new_node;this->tail.pt = new_node;
+            (this->tail.m_pt)->next = new_node;(this->tail.m_pt)->next.m_pt = new_node;
+            this->tail = new_node;this->tail.m_pt = new_node;
         }
 
         else {
@@ -122,11 +123,11 @@ void LinkedList::addStudent(Student student) {
 void LinkedList::display(ostream& outs) const {
     outs << "Roster includes " << occupied << " of " << capacity << " students\n";
 
-    Node* it = head.pt;
+    Node* it = head.m_pt;
     while (it != nullptr) {
         outs << it->data << endl;
 
-        it = it->next.pt;
+        it = it->next.m_pt;
     }
 }
 

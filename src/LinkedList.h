@@ -10,15 +10,15 @@
 
 // Gives each class a unique ID
 	/// Used for cloning
-class counter : public Singleton<counter> {
-private:
-	unsigned int count;
-public:
-	counter() { count = 0; }
-	unsigned int GetCounter() {
-		return count++;
-	}
-};
+//class counter : public Singleton<counter> {
+//private:
+//	unsigned int count;
+//public:
+//	counter() { count = 0; }
+//	unsigned int GetCounter() {
+//		return count++;
+//	}
+//};
 
 /* Linked List comprise of a list of objects
  * that have data in them and pointers pointing
@@ -34,7 +34,7 @@ private:
 		PointerObj<Node> next;
 
 		// Class ID
-		unsigned int ClassID() override { static unsigned int k = counter::GetSingleton().GetCounter(); return k; }
+		//unsigned int ClassID() override { static unsigned int k = counter::GetSingleton().GetCounter(); return k; }
 		/**
 		 * Default Constructor
 		 */
@@ -43,8 +43,8 @@ private:
 		/**
 		 * Clone Constructor
 		 */
-		Node(objType dynamic) : Serializable{ dynamic } {CloneRegistration();}
-		Serializable* clone() { return new Node(Dynamic); }
+		Node(ObjectChar dynamic) : Serializable{ dynamic } {}
+		// Serializable* clone() { return new Node(Dynamic); }
 
 		/**
 		 * Historical Data Constructor
@@ -53,13 +53,13 @@ private:
 
 		void OnSave(std::ofstream& file) {
 			data.OnSave(file);
-			file << next.PtID << std::endl;
+			file << next.m_PtID << std::endl;
 		}
 
 		void OnLoad(std::ifstream& file)
 		{
 			data.OnLoad(file);
-			file >> next.PtID;
+			file >> next.m_PtID;
 		}
 	};
     PointerObj<Node> head;
@@ -70,19 +70,19 @@ public:
     int occupied;
 
 	// ClassID
-	unsigned int ClassID() override { static unsigned int k = counter::GetSingleton().GetCounter(); return k; }
+	//unsigned int ClassID() override { static unsigned int k = counter::GetSingleton().GetCounter(); return k; }
 
 	/**
 	* Clone Shit
 	*/
-	LinkedList(objType dynamic) : Serializable{ dynamic } {
-		this->head.pt = nullptr;
-		this->tail.pt = nullptr;
+	LinkedList(ObjectChar dynamic) : Serializable{ dynamic } {
+		this->head.m_pt = nullptr;
+		this->tail.m_pt = nullptr;
 		this->capacity = 10;
 		this->occupied = 0;
-        CloneRegistration();
+        //CloneRegistration();
 	}
-	Serializable* clone() { return new LinkedList(Dynamic); }
+	//Serializable* clone() { return new LinkedList(Dynamic); }
 
     /**
      * Default Constructor
@@ -155,22 +155,22 @@ public:
                  {
         int i = 0;
         PointerObj<Node> it = this->head;
-        auto iter = pt_map.find(head.PtID);
+        auto iter = pt_map.find(head.m_PtID);
         auto iter2 = obj_map.find(iter->second);
         Serializable * temp = iter2->second;
-        it.pt = (Node *)temp;
-        it = it.pt->next;
+        it.m_pt = (Node *)temp;
+        it = it.m_pt->next;
         i++;
         while (i != occupied){
-            auto iter = pt_map.find(it.PtID);
+            auto iter = pt_map.find(it.m_PtID);
             auto iter2 = obj_map.find(iter->second);
             Serializable * temp = iter2->second;
-            it.pt->next.pt = (Node *)temp;
-            it = it.pt->next;
+            it.m_pt->next.m_pt = (Node *)temp;
+            it = it.m_pt->next;
             i++;
         }
-        tail.pt = it.pt;
-        tail.pt->next.pt = nullptr;
+        tail.m_pt = it.m_pt;
+        tail.m_pt->next.m_pt = nullptr;
     }
 };
 
