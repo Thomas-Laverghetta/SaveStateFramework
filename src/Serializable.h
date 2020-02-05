@@ -17,7 +17,7 @@
     Every object will have its own unique ID that serializable will
     use to reference the class.
 */
-enum objType {Static, Dynamic};
+enum ObjectChar {Static, Dynamic};
 /// Gives the object the ability to save
 class Serializable
 {
@@ -28,9 +28,10 @@ private:
     // Used for current object ID
     unsigned int m_objID;
 
+    ObjectChar m_char {Static};
 public:
     explicit Serializable();
-    explicit Serializable(objType t){m_objID = 0;}
+    explicit Serializable(ObjectChar t);
     ~Serializable();
 
     // Get the ID for object
@@ -38,6 +39,11 @@ public:
 
 	// return number of objects declared in simulation
 	unsigned int NumberOfObjects() const { return m_id; }
+
+    // get object char
+    ObjectChar GetObjectChar(){
+        return m_char;
+    }
 
     // pure virtual functions for serialization and deserialization
     virtual void OnSave(std::ofstream& file) = 0;
@@ -94,7 +100,7 @@ public:
         void setPtID(double ID) { m_PtID = ID;}
 
         void Reconnect(){
-            m_pt = SerializationManager::GetSingleton().Reconnect(m_PtID);
+            m_pt = SerializationManager::GetInstance()->Reconnect(m_PtID);
         }
     };
 };

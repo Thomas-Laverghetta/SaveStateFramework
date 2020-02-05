@@ -15,7 +15,6 @@
 #include <cstring>
 
 /// Created Sources
-#include "Singleton.h"
 #include "Serializable.h"
 
 /* Summary
@@ -23,9 +22,13 @@
     every object instantiated and needs to be serialized.
 */
 
-class SerializationManager: public Singleton<SerializationManager> // The singleton class
+class SerializationManager
 {
 private:
+    // Singleton
+    SerializationManager();
+    static SerializationManager * _instance;
+
     /// The file to save data to (can be anytype)
     char * m_filename{(char*) "Save.txt"}; // default file name and type
     
@@ -39,6 +42,13 @@ private:
     // Reference to PointerObj
     std::vector<Serializable::PointerObj<Serializable>*> m_reconnect;
 public:
+    // Singleton get instance function
+    static SerializationManager * GetInstance(){
+        if(_instance == nullptr)
+            _instance = new SerializationManager;
+        return _instance;
+    }
+    
     /// File to save states to
     void SetupFile(char * fileName){
         m_filename = fileName;
@@ -109,7 +119,7 @@ public:
         bool fileValue = true;
         //file << fileValue << std::endl << std::endl;
         file.write((char *)&fileValue, sizeof(fileValue));
-        objType t = Static;
+        ObjectChar t = Static;
 
         for (auto& serializable : m_serial_map){
             file.write((char*)&t, sizeof(t));
@@ -143,7 +153,7 @@ public:
                 unsigned int serializableId;
 
                 // temp for finding the type of class
-                objType type;
+                ObjectChar type;
 
                 while (!file.eof()) {
                     file.read((char*)&type, sizeof(type));
@@ -189,4 +199,7 @@ public:
     }
 
 };
+
+SerializationManager * SerializationManager::_instance = nullptr;
+
 #endif //TESTER_SERIALIZATIONMANAGER_H

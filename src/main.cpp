@@ -7,9 +7,8 @@
 using namespace std;
 
 int main() {
-	new SerializationManager();
-	new counter();
-	SerializationManager::GetSingleton().SetupFile((char*)"file.txt");
+	SerializationManager * SM = SerializationManager::GetInstance();
+	SM->SetupFile((char*)"file.txt");
 	LinkedList oduRoster;
 	//Student thomas("Thomas", "Laverghetta", 4.0, 21, "CMSE!");
 	//Student kyle("Kyle", "Tanyag", 4.0, 22, "Eh.");
@@ -22,7 +21,7 @@ int main() {
 	oduRoster.addStudent(thomas);
 	oduRoster.addStudent(kyle);
 	//oduRoster.addStudent(BOYYYYY);
-	SerializationManager::GetSingleton().Load();
+	SM->Load();
 	//    cout << oduRoster;
 	oduRoster.display(cout);
 }

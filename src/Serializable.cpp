@@ -10,7 +10,7 @@ unsigned int Serializable::m_id = 1;
 /// removing serializable object from manager
 Serializable::~Serializable(){
     // Getting Singleton
-    SerializationManager* pSerializationManager = SerializationManager::GetSingletonPtr();
+    SerializationManager* pSerializationManager = SerializationManager::GetInstance();
 
     // Testing if not null
     if (pSerializationManager)
@@ -23,16 +23,21 @@ Serializable::~Serializable(){
 /// registering object along with assigning unique ID number
 Serializable::Serializable(){
     // SerialID is unique ID
-    objID=m_id;
+    m_objID=m_id;
 
     // Registers serializable object
-    SerializationManager::GetSingleton().RegisterSerializable(this);
+    SerializationManager::GetInstance()->RegisterSerializable(this);
 
     // static ID that iterates every new object
     m_id++;
 }
 
-void Serializable::CloneRegistration() {
-    // Register Clone Function
-    SerializationManager::GetSingleton().AddClassClone(this, ClassID());
+// Dynamic objects (usually)
+Serializable::Serializable(ObjectChar t){
+    m_char = t;
 }
+
+// void Serializable::CloneRegistration() {
+//     // Register Clone Function
+//     SerializationManager::GetSingleton().AddClassClone(this, ClassID());
+// }
