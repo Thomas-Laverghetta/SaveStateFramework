@@ -1,7 +1,7 @@
 //
 // Created by tomlaverghettamsve on 11/14/19.
 //
-
+#pragma once
 #ifndef TESTER_STUDENT_H
 #define TESTER_STUDENT_H
 

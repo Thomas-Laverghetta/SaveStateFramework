@@ -6,7 +6,6 @@
 #define TESTER_LINKEDLIST_H
 #include "Student.h"
 #include "Serializable.h"
-#include "PointerObj.h"
 
 // Gives each class a unique ID
 	/// Used for cloning
@@ -24,14 +23,13 @@
  * that have data in them and pointers pointing
  * to another object
  */
-
-class LinkedList: Serializable {
+class LinkedList: public Serializable {
 private:
-	class Node : Serializable {
+	class Node : public Serializable {
 	public:
 		// Data
 		Student data;
-		PointerObj<Node> next;
+		PointerObj<Node> next{ this };
 
 		// Class ID
 		//unsigned int ClassID() override { static unsigned int k = counter::GetSingleton().GetCounter(); return k; }
@@ -43,7 +41,7 @@ private:
 		/**
 		 * Clone Constructor
 		 */
-		Node(ObjectChar dynamic) : Serializable{ dynamic } {}
+		
 		// Serializable* clone() { return new Node(Dynamic); }
 
 		/**
@@ -62,9 +60,9 @@ private:
 			file >> next.m_PtID;
 		}
 	};
-    PointerObj<Node> head;
+	PointerObj<Node> head{ this };
 public:
-    PointerObj<Node> tail;
+	PointerObj<Node> tail{ this };
 
     int capacity;
     int occupied;
@@ -75,13 +73,13 @@ public:
 	/**
 	* Clone Shit
 	*/
-	LinkedList(ObjectChar dynamic) : Serializable{ dynamic } {
-		this->head.m_pt = nullptr;
-		this->tail.m_pt = nullptr;
-		this->capacity = 10;
-		this->occupied = 0;
-        //CloneRegistration();
-	}
+	//LinkedList(ObjectChar dynamic) : Serializable{ dynamic } {
+	//	this->head.m_pt = nullptr;
+	//	this->tail.m_pt = nullptr;
+	//	this->capacity = 10;
+	//	this->occupied = 0;
+ //       //CloneRegistration();
+	//}
 	//Serializable* clone() { return new LinkedList(Dynamic); }
 
     /**
@@ -154,7 +152,8 @@ public:
                  const std::unordered_map<unsigned int, Serializable*>& obj_map)
                  {
         int i = 0;
-        PointerObj<Node> it = this->head;
+		PointerObj<Node> it(this);
+		it = this->head;
         auto iter = pt_map.find(head.m_PtID);
         auto iter2 = obj_map.find(iter->second);
         Serializable * temp = iter2->second;

@@ -1,7 +1,6 @@
 //
 // Created by tomlaverghettamsve on 10/3/19.
 //
-
 #ifndef TESTER_SERIALIZABLE_H
 #define TESTER_SERIALIZABLE_H
 
@@ -24,6 +23,7 @@ class Serializable
 private:
     // Used to save the current ID number, changes every instance
     static unsigned int m_id;
+	static int m_Dyn_id;
 
     // Used for current object ID
     unsigned int m_objID;
@@ -51,7 +51,7 @@ public:
 
 	// Get clone function
     //virtual Serializable* clone() = 0;
-    
+
     template <class T>
     class PointerObj{
         public:
@@ -64,32 +64,18 @@ public:
         /// Number of Pointers used on the object
         static unsigned int m_numPtr;
 
+		Serializable* m_serial;
         /// Registering with parent class
-        PointerObj(){
+        PointerObj(Serializable* pt){
             // Initializing variables
+			m_serial = pt;
             m_pt = nullptr;
-            m_PtID = m_objID + DBL_MIN*m_numPtr;
+            m_PtID = pt->m_objID + DBL_MIN*m_numPtr;
             m_numPtr++;
         }
 
         /// Registering an object
-        PointerObj& operator=(T * s){
-            if (m_pt = nullptr){
-                // Registering with pointer map
-                SerializationManager::GetInstance()->RegisterPointer(m_PtID, (Serializable*)s->GetObjectID(), this);
-            }
-            else {
-                // remove the previous pointer data
-                SerializationManager::GetInstance()->RemovePointer(m_PtID);
-                SerializationManager::GetInstance()->RegisterPointer(m_PtID, (Serializable*)s->GetObjectID(), this);
-            }
-            
-            // setting
-            m_pt = s;
-    
-            
-            return *this;
-        }
+		PointerObj& operator=(T* s);
 
         PointerObj&operator=(const PointerObj& p){
             m_PtID = p.m_PtID;
@@ -99,12 +85,8 @@ public:
 
         void setPtID(double ID) { m_PtID = ID;}
 
-        void Reconnect(){
-            m_pt = SerializationManager::GetInstance()->Reconnect(m_PtID);
-        }
+		void Reconnect();
     };
 };
 
-template <class T>
-unsigned int Serializable::PointerObj<T>::m_numPtr = 0;
 #endif //TESTER_SERIALIZABLE_H

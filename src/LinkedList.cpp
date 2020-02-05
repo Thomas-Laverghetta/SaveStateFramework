@@ -7,14 +7,14 @@
 using namespace std;
 
 //------------------------------------------------------------------------------
-LinkedList::Node::Node() {
+LinkedList::Node::Node() : Serializable{ Dynamic } {
     data = Student();
     this->next.m_pt = nullptr;
     ///CloneRegistration();
 }
 
 //------------------------------------------------------------------------------
-LinkedList::Node::Node(Student s) {
+LinkedList::Node::Node(Student s) : Serializable{ Dynamic } {
     data = s;
     this->next.m_pt = nullptr;
     //CloneRegistration();
