@@ -43,7 +43,7 @@ private:
 		/**
 		 * Clone Constructor
 		 */
-		Node(ObjectChar dynamic) : Serializable{ dynamic } {}
+		//Node(ObjectChar dynamic);
 		// Serializable* clone() { return new Node(Dynamic); }
 
 		/**
