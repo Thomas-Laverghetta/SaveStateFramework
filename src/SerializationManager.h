@@ -4,7 +4,7 @@
 
 #ifndef TESTER_SERIALIZATIONMANAGER_H
 #define TESTER_SERIALIZATIONMANAGER_H
-#include <unordered_map>
+
 #include <map>
 #include <cassert>     /* assert */
 #include <fstream>
