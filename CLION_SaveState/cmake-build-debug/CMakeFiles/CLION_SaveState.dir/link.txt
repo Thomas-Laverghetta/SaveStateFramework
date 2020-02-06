@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/CLION_SaveState.dir/main.cpp.o CMakeFiles/CLION_SaveState.dir/Serializable.cpp.o CMakeFiles/CLION_SaveState.dir/SerializationManager.cpp.o CMakeFiles/CLION_SaveState.dir/LinkedList.cpp.o CMakeFiles/CLION_SaveState.dir/Student.cpp.o  -o CLION_SaveState 

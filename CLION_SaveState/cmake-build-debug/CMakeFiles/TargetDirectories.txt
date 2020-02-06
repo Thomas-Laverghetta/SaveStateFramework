@@ -1,0 +1,3 @@
+/home/tomlaverghettamsve/GitHUB/CLION_SaveState/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/tomlaverghettamsve/GitHUB/CLION_SaveState/cmake-build-debug/CMakeFiles/CLION_SaveState.dir
+/home/tomlaverghettamsve/GitHUB/CLION_SaveState/cmake-build-debug/CMakeFiles/edit_cache.dir
