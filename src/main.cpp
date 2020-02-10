@@ -18,8 +18,8 @@ int main() {
     Student kyle;
 	Student thomas;
 	oduRoster.addStudent(mark);
-	oduRoster.addStudent(thomas);
-	oduRoster.addStudent(kyle);
+    //oduRoster.addStudent(thomas);
+    //oduRoster.addStudent(kyle);
 	//oduRoster.addStudent(BOYYYYY);
 	SM->Load();
 	//    cout << oduRoster;

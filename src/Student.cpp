@@ -10,15 +10,15 @@ using namespace std;
 
 //------------------------------------------------------------------------------
 Student::Student() {
-    f_name = "Mark";
-    l_name = "Patton";
+    f_name = 'M';
+    l_name = 'P';
     gpa = 2.8;
     age = 22;
-    quote = "I_CAN_DO_IT!";
+    quote = 'I';
 }
 
 //------------------------------------------------------------------------------
-Student::Student(string first, string last, float x, int y, string z) {
+Student::Student(char first, char last, float x, int y, char z) {
     f_name = first;
     l_name = last;
     gpa = x;
@@ -33,7 +33,7 @@ Student::~Student() {
 }
 
 //------------------------------------------------------------------------------
-void Student::setStudentName(string First, string Last) {
+void Student::setStudentName(char First, char Last) {
     f_name = First;
     l_name = Last;
 }
@@ -48,12 +48,12 @@ void Student::printStudentData() {
 }
 
 //------------------------------------------------------------------------------
-string Student::getFullName() const {
-    return f_name + " " + l_name;
-}
+//string Student::getFullName() const {
+//    return f_name + " " + l_name;
+//}
 
 //------------------------------------------------------------------------------
 ostream& operator<<(ostream& outs, const Student& prt) {
-    outs << prt.getFullName();
+    //outs << prt;
     return outs;
 }

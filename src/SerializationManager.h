@@ -25,7 +25,7 @@ class SerializationManager
 {
 private:
     // Singleton
-    SerializationManager();
+    SerializationManager()= default;
     static SerializationManager * _instance;
 
     /// The file to save data to (can be anytype)
@@ -33,18 +33,25 @@ private:
     
     /// Pointer and Serialization Variables
     // holds pointer ID and corrisponding object ID to point to
-    std::map<double, unsigned int> m_pointer_map;
+    std::map<double, Serializable::PointerObj*> m_pointer_map;
 
     // used to store pointers of Serializable objects and unique ID
     std::map<unsigned int, Serializable*> m_serial_map;
 
     // Reference to PointerObj
-    std::vector<Serializable::PointerObj<Serializable>*> m_reconnect;
+    //std::vector<Serializable::PointerObj*> m_reconnect;
+
+    // load
+    std::map<double, int> m_load_pointer_map;
+
+    // Saves what dynamic objects have been saved
+    std::map<int, bool> m_saved_pointer_map;
+
 public:
     // Singleton get instance function
     static SerializationManager * GetInstance(){
         if(_instance == nullptr)
-            _instance = new SerializationManager;
+            _instance = new SerializationManager();
         return _instance;
     }
     
@@ -52,12 +59,11 @@ public:
 	void SetupFile(char* fileName);
 
     /// objects will register pointers to serialize and their objects their pointing to
-	void RegisterPointer(double Pt_ID, unsigned int Obj_ID, Serializable::PointerObj<Serializable>* ptr);
+	void RegisterPointer(double Pt_ID, Serializable::PointerObj* ptr);
 
     // Finds pointer in point_map and removes it
 	void RemovePointer(double ptrID);
-
-
+ 
     /// Registering the objects
 	void RegisterSerializable(Serializable* pSerializable);
 
@@ -76,9 +82,16 @@ public:
     /// loading data from all object (wave two)
 	bool Load();
 
-    /// Good reference for Repointing pointers
-    // given pointer
-	Serializable* Reconnect(double pt);
+    /// Reconnect pointer to object based on pointer ID
+	Serializable** Reconnect(double pt);
 
+    /// Determines if an dynamic object has been saved
+    bool SavedQuestion(double& ptID);
+
+    /// Determines if an dynamic object has been saved
+    bool LoadedQuestion(double& ptID);
+
+    // Determining if the dynamic object is for ptr
+    bool SerializationManager::ObjectIdEqualPtrId(int& objectID, double& ptrID);
 };
 #endif //TESTER_SERIALIZATIONMANAGER_H

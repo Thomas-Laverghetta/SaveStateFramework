@@ -16,7 +16,9 @@
     Every object will have its own unique ID that serializable will
     use to reference the class.
 */
+// Object's charaterstics
 enum ObjectChar {Static, Dynamic};
+
 /// Gives the object the ability to save
 class Serializable
 {
@@ -26,16 +28,23 @@ private:
 	static int m_Dyn_id;
 
     // Used for current object ID
-    unsigned int m_objID;
+    unsigned int m_objID {0};
 
+    // the object's charateristics (Static or Dynamic)
     ObjectChar m_char {Static};
 public:
+    // constructor and destructor
     explicit Serializable();
-    explicit Serializable(ObjectChar t);
+    explicit Serializable(ObjectChar t); // for dynamic variables
     ~Serializable();
 
     // Get the ID for object
     unsigned int GetObjectID() const { return m_objID; }
+
+    // setting object ID
+    void SetObjectID(const int& objID){
+        m_objID = objID;
+    }
 
 	// return number of objects declared in simulation
 	unsigned int NumberOfObjects() const { return m_id; }
@@ -45,47 +54,54 @@ public:
         return m_char;
     }
 
+    // Setting the char variable
+    void SetObjectChar(const ObjectChar& t){
+        m_char = t;
+    }
+
     // pure virtual functions for serialization and deserialization
     virtual void OnSave(std::ofstream& file) = 0;
     virtual void OnLoad(std::ifstream& file) = 0;
 
-	// Get clone function
-    //virtual Serializable* clone() = 0;
-
-    template <class T>
+    /*
+        I will save reference to object that pointer is pointing to
+        (m_pt) and save the objectID of the current obj it is corrilated
+        with. 
+    */
     class PointerObj{
-        public:
-        /// pointer pointing to other objects
-        T* m_pt;
+    public:
+        // pointer reference to the object that pointer is pointing at
+        Serializable** m_pt { nullptr };
 
-        /// Pointer Object ID
+        // Pointer ID used for pointer_map
         double m_PtID;
 
-        /// Number of Pointers used on the object
+        // Number of Pointers used on the object
         static unsigned int m_numPtr;
 
-		Serializable* m_serial;
-        /// Registering with parent class
-        PointerObj(Serializable* pt){
-            // Initializing variables
-			m_serial = pt;
-            m_pt = nullptr;
-            m_PtID = pt->m_objID + DBL_MIN*m_numPtr;
-            m_numPtr++;
-        }
+        // Registering pointer with Serialization manager so it can be saved
+        explicit PointerObj(Serializable**, Serializable*);
 
-        /// Registering an object
-		PointerObj& operator=(T* s);
+        // removing object from pointer_map
+        ~PointerObj();
 
-        PointerObj&operator=(const PointerObj& p){
-            m_PtID = p.m_PtID;
-            m_pt = p.m_pt;
-            return *this;
-        }
-
+        // Setting the Pointer ID
         void setPtID(double ID) { m_PtID = ID;}
 
+        // Reregisters pointer with pointer_map
+        void Reregister();
+
+        // reconnecting pointer with corrisponding data
 		void Reconnect();
+
+        // determines if a object has been saved
+        bool SavedQuestion();
+
+        // determines if a object has been loaded
+        bool LoadedQuestion();
+
+        // Determining if the dynamic object is for ptr
+        bool ObjectIdEqualPtrId(int& objectID);
     };
 };
 

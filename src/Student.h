@@ -9,7 +9,7 @@
 #include <iostream>
 #include "Serializable.h"
 #include <stdio.h>
-#include <string.h>
+#include <string>
 using namespace std;
 
 /* Students are objects that contain
@@ -19,14 +19,12 @@ using namespace std;
  */
 
 class Student {
-
 private:
-    string f_name;
-    string l_name;
+    char f_name;
+    char l_name;
     float gpa;
     int age;
-    string quote;
-    unsigned int classID{1};
+    char quote;
 public:
     
 	/**
@@ -37,7 +35,7 @@ public:
     /**
      * Create a student with information
      */
-    Student(string first, string last, float gpa, int age, string quote);
+    Student(char first, char last, float gpa, int age, char quote);
 
     /**
      * Destructor. Prints that student has left ODU
@@ -48,7 +46,7 @@ public:
     /**
      * Sets student's first and last name
      */
-    void setStudentName(string First, string Last);
+    void setStudentName(char First, char Last);
 
     /**
      * Prints all student data
@@ -58,29 +56,23 @@ public:
     /**
      * Gets a student's first name
      */
-    string getFullName() const;
+    //string getFullName() const;
 
     void OnSave(std::ofstream& file){
         /// Implement ClassID here
-//        file.write((char* )&classID,sizeof(classID));
-//        file.write((char* )&f_name, sizeof(f_name));
-//        file.write((char* )&l_name, sizeof(l_name));
-//        file.write((char* )&gpa, sizeof(gpa));
-//        file.write((char* )&age, sizeof(age));
-//        file.write((char* )&quote, sizeof(quote));
-
-        file << classID << std::endl << f_name << std::endl <<
-            l_name << std::endl << gpa << endl << age << endl <<
-            quote << endl << endl;
-
+        //file.write((char* )&classID,sizeof(classID));
+        file.write((char* )&f_name, sizeof(f_name));
+        file.write((char* )&l_name, sizeof(l_name));
+        file.write((char* )&gpa, sizeof(gpa));
+        file.write((char* )&age, sizeof(age));
+        file.write((char* )&quote, sizeof(quote));
     }
     void OnLoad(std::ifstream& file){
-//        file.read((char* )&f_name, sizeof(f_name));
-//        file.read((char* )&l_name, sizeof(l_name));
-//        file.read((char* )&gpa, sizeof(gpa));
-//        file.read((char* )&age, sizeof(age));
-//        file.read((char* )&quote, sizeof(quote));
-        file >> f_name >> l_name >> gpa >> age >> quote;
+        file.read((char* )&f_name, sizeof(f_name));
+        file.read((char* )&l_name, sizeof(l_name));
+        file.read((char* )&gpa, sizeof(gpa));
+        file.read((char* )&age, sizeof(age));
+        file.read((char* )&quote, sizeof(quote));
     }
 };
 

@@ -8,8 +8,7 @@
 unsigned int Serializable::m_id = 1;
 int Serializable::m_Dyn_id = -1;
 
-template <class T>
-unsigned int Serializable::PointerObj<T>::m_numPtr = 0;
+unsigned int Serializable::PointerObj::m_numPtr = 0;
 
 /// removing serializable object from manager
 Serializable::~Serializable(){
@@ -45,31 +44,58 @@ Serializable::Serializable(ObjectChar t){
 		m_objID = m_id++;
 }
 
-template <class T>
-Serializable::PointerObj<T>& Serializable::PointerObj<T>::operator=(T* s) {
-	if (m_pt == nullptr) {
-		// Registering with pointer map
-		SerializationManager::GetInstance()->RegisterPointer(m_PtID, ((Serializable*)s)->GetObjectID(), (Serializable::PointerObj<Serializable>*)this);
-	}
-	else {
-		// remove the previous pointer data
-		SerializationManager::GetInstance()->RemovePointer(m_PtID);
-		SerializationManager::GetInstance()->RegisterPointer(m_PtID, ((Serializable*)s)->GetObjectID(), (Serializable::PointerObj<Serializable>*)this);
-	}
+//----------------------POINTEROBJ--------------------------
 
-	// setting
-	m_pt = s;
+Serializable::PointerObj::PointerObj(Serializable **pt, Serializable * currentNode){
+    // pointer reference
+    m_pt = pt;
+    
+    // creating object ID
+    m_PtID = currentNode->GetObjectID() + DBL_MIN*m_numPtr;
 
+    // number of pointer objects created for object
+    m_numPtr++;
 
-	return *this;
+    // register pointer with pointer_map
+    SerializationManager::GetInstance()->RegisterPointer(m_PtID,this);
 }
 
-template <class T>
-void Serializable::PointerObj<T>::Reconnect() {
+Serializable::PointerObj::~PointerObj(){
+    // Getting Singleton
+    SerializationManager* pSerializationManager = SerializationManager::GetInstance();
+
+    // Testing if not null
+    if (pSerializationManager)
+    {
+        // registoring with serial mamager
+        pSerializationManager->RemovePointer(m_PtID);
+    }
+
+    m_pt = nullptr;
+}
+
+// calls serialization manager's reconnect function which as access
+// to pointer_map
+void Serializable::PointerObj::Reconnect() {
 	m_pt = SerializationManager::GetInstance()->Reconnect(m_PtID);
 }
 
-// void Serializable::CloneRegistration() {
-//     // Register Clone Function
-//     SerializationManager::GetSingleton().AddClassClone(this, ClassID());
-// }
+// Used onLoad
+void Serializable::PointerObj::Reregister() {
+    // Registers pointer ID and itself
+    SerializationManager::GetInstance()->RegisterPointer(m_PtID,this);
+}
+
+bool Serializable::PointerObj::SavedQuestion(){
+    SerializationManager::GetInstance()->SavedQuestion(m_PtID);
+}
+
+bool Serializable::PointerObj::LoadedQuestion(){
+    SerializationManager::GetInstance()->LoadedQuestion(m_PtID);
+}
+
+// Determining if the dynamic object is for ptr
+bool Serializable::PointerObj::ObjectIdEqualPtrId(int& objectID){
+    SerializationManager::GetInstance()->ObjectIdEqualPtrId(objectID);
+}
+

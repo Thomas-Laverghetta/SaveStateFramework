@@ -29,40 +29,60 @@ private:
 	public:
 		// Data
 		Student data;
-		PointerObj<Node> next{ this };
+		Node * next;
 
-		// Class ID
-		//unsigned int ClassID() override { static unsigned int k = counter::GetSingleton().GetCounter(); return k; }
-		/**
-		 * Default Constructor
-		 */
+        // serialize node
+		PointerObj serial_next{reinterpret_cast<Serializable **>(&next), this};
+
+        // constructor
 		Node();
+		explicit Node(Student s);
 
-		/**
-		 * Clone Constructor
-		 */
-		
-		// Serializable* clone() { return new Node(Dynamic); }
-
-		/**
-		 * Historical Data Constructor
-		 */
-		Node(Student s);
-
+        // save call
 		void OnSave(std::ofstream& file) {
+		    ObjectChar oc = GetObjectChar();
+            file.write((char *)&oc, sizeof(oc));
+            int objID = GetObjectID();
+            file.write((char *)&objID, sizeof(objID));
 			data.OnSave(file);
-			file << next.m_PtID << std::endl;
+
+            if (next != nullptr && next->GetObjectChar() == Dynamic){
+                // determining the object has been saved
+                if(!serial_next.SavedQuestion()){
+                    next->OnSave(file);
+                }
+            }
 		}
 
 		void OnLoad(std::ifstream& file)
 		{
 			data.OnLoad(file);
-			file >> next.m_PtID;
-		}
+			
+			serial_next.Reregister();
+            
+            // determining if an dynamic object needed to be deserialied
+            ObjectChar type;
+            file.read((char*)& type, sizeof(type));
+            if (type == Dynamic){
+                // object id from the next object
+                int objectID;
+                file.read((char*)&objectID, sizeof(objectID));
+                if(serial_next.ObjectIdEqualPtrId(objectID)){
+                    // dynamic object creation
+                    next = new Node();
+                    next->OnLoad(file);
+                }
+            }
+            else{
+                next = nullptr;
+            }
+        }
 	};
-	PointerObj<Node> head{ this };
+	Node * head;
+    PointerObj serial_head{reinterpret_cast<Serializable **>(&head), this};;
 public:
-	PointerObj<Node> tail{ this };
+	Node * tail;
+    PointerObj serial_tail{reinterpret_cast<Serializable **>(&tail), this};;
 
     int capacity;
     int occupied;
@@ -134,9 +154,27 @@ public:
 //            file.write((char *)&(*it), sizeof(*it));
 //            it = it->next;
 //        }
-//        file.write((char *)&capacity, sizeof(capacity));
-//        file.write((char *)&occupied, sizeof(occupied));
-        file << capacity << endl << occupied << endl << endl;
+        int objID = GetObjectID();
+        ObjectChar t = GetObjectChar();
+
+        file.write((char*)&t, sizeof(t));
+        file.write((char*)&objID, sizeof(objID));
+
+        file.write((char *)&capacity, sizeof(capacity));
+        file.write((char *)&occupied, sizeof(occupied));
+
+        if (head != nullptr && head->GetObjectChar() == Dynamic){
+            // determining the object has been saved
+            if(!serial_head.SavedQuestion()){
+                    head->OnSave(file);
+            }
+        }
+        if (tail != nullptr && tail->GetObjectChar() == Dynamic){
+            // determining the object has been saved
+            if(!serial_tail.SavedQuestion()){
+                    tail->OnSave(file);
+            }
+        }
     }
     void OnLoad(std::ifstream& file){
 //        while (it != nullptr){
@@ -144,32 +182,33 @@ public:
 //            it->OnLoad(file);
 //            it = it->next;
 //        }
-//        file.read((char *)&capacity, sizeof(capacity));
-//        file.read((char *)&occupied, sizeof(occupied));
-        file >> capacity >> occupied;
-    }
-    void RePoint(const std::unordered_map<double, unsigned int>& pt_map,
-                 const std::unordered_map<unsigned int, Serializable*>& obj_map)
-                 {
-        int i = 0;
-		PointerObj<Node> it(this);
-		it = this->head;
-        auto iter = pt_map.find(head.m_PtID);
-        auto iter2 = obj_map.find(iter->second);
-        Serializable * temp = iter2->second;
-        it.m_pt = (Node *)temp;
-        it = it.m_pt->next;
-        i++;
-        while (i != occupied){
-            auto iter = pt_map.find(it.m_PtID);
-            auto iter2 = obj_map.find(iter->second);
-            Serializable * temp = iter2->second;
-            it.m_pt->next.m_pt = (Node *)temp;
-            it = it.m_pt->next;
-            i++;
+        file.read((char *)&capacity, sizeof(capacity));
+        file.read((char *)&occupied, sizeof(occupied));
+        serial_head.Reregister();
+        serial_tail.Reregister();
+
+        // determining if an dynamic object needed to be deserialied
+        ObjectChar type;
+        file.read((char*)& type, sizeof(type));
+        if (type == Dynamic){
+            // object id from the next object
+            int objectID;
+            file.read((char*)&objectID, sizeof(objectID));
+            if(serial_head.ObjectIdEqualPtrId(objectID)){
+                // dynamic object creation
+                head = new Node();
+                head->OnLoad(file);
+            }
+            if(serial_tail.ObjectIdEqualPtrId(objectID)){
+                // dynamic object creation
+                tail = new Node();
+                tail->OnLoad(file);
+            }
         }
-        tail.m_pt = it.m_pt;
-        tail.m_pt->next.m_pt = nullptr;
+        else{
+            head = nullptr;
+            tail = nullptr;
+        }
     }
 };
 
