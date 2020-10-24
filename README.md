@@ -1,7 +1,7 @@
-## Save-State Algorithm
+# Save-State Algorithm
 Save-state algorithm allows for system objects to be saved and loaded to/from binary files.  
 
-# Creating Conforming Class 
+## Creating Conforming Class 
 All classes, whose objects want to be saved, must inherit SaveState; create load, save, get class id, and report virtual methods; and create static class id and static New method for dynamic object load.
 
 Using generatic class, the following is the methods a class must implement:
@@ -44,7 +44,7 @@ SaveStateClassRegister(class::classId, &class::New)
 ```
 This allows for dynamic loading (creating dynamic objects). 
 
-# Process Work Flow
+## Process Work Flow
 ```
 System Execution:
     Register Classes w/Save-State Manager 
