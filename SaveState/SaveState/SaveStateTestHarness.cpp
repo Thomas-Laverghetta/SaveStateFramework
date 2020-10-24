@@ -1,4 +1,5 @@
 #include "SaveStateTestHarness.h"
+using namespace std;
 
 string file = "testSave.bin";
 
