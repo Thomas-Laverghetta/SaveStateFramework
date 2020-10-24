@@ -38,10 +38,13 @@ private:
 	static unsigned int _nextId;
 };
 
-// Functions for SaveStateManager accessors
-
-/* Initializes Save-State Mechanism*/
-void SaveStateInit(std::string saveFile, std::string loadFile);
+///// Functions for SaveStateManager accessors
 
 /* Registers class with Save-State Manager*/
 void SaveStateClassRegister(unsigned int classId, SaveState* obj);
+
+/* Loads system states from load binary file*/
+void SaveStateLoad(std::string loadFile);
+
+/* Loads system states from load binary file*/
+void SaveStateSave(std::string saveFile);

@@ -10,7 +10,7 @@ class SaveStateManager
 {
 public:
 	/* Initializes save state manager.*/
-	static void Init(string saveFile, string loadFile);
+	static void Init();
 
 	/* Registers SaveState with manager.*/
 	static void Register(SaveState* ss);
@@ -19,10 +19,10 @@ public:
 	static void Unregister(SaveState* ss);
 
 	/* Saves all objects to file.*/
-	static void SaveAll();
+	static void SaveAll(string saveFile);
 
 	/* Loads all objects from file.*/
-	static void LoadAll();
+	static void LoadAll(string loadFile);
 
 	/* Registers Class for class mapping.
 	All SaveState Classes must create static */
@@ -33,7 +33,5 @@ public:
 private:
 	static vector<SaveState*> _SaveStateList;
 	static map<unsigned int, SaveState*> _classMap;
-	static string _loadFile;
-	static string _saveFile;
 };
 

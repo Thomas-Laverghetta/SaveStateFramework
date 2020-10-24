@@ -21,11 +21,6 @@ SaveState::~SaveState()
 	SaveStateManager::Unregister(this);
 }
 
-void SaveStateInit(string saveFile, string loadFile)
-{
-	SaveStateManager::Init(saveFile, loadFile);
-}
-
 void SaveStateClassRegister(unsigned int classId, SaveState* obj)
 {
 	SaveStateManager::RegisterClass(classId, obj);

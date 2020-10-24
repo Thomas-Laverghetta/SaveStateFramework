@@ -4,14 +4,6 @@
 // Initializing Static Variables
 vector<SaveState*> SaveStateManager::_SaveStateList = vector<SaveState*>();
 map<unsigned int, SaveState*> SaveStateManager::_classMap = map<unsigned int, SaveState*>();
-string SaveStateManager::_loadFile = "";
-string SaveStateManager::_saveFile = "";
-
-void SaveStateManager::Init(string saveFile, string loadFile)
-{
-	_saveFile = saveFile;
-	_loadFile = loadFile;
-}
 
 void SaveStateManager::Register(SaveState* ss)
 {
@@ -24,10 +16,10 @@ void SaveStateManager::Unregister(SaveState* ss)
 	_SaveStateList.erase(std::remove(_SaveStateList.begin(), _SaveStateList.end(), ss), _SaveStateList.end());
 }
 
-void SaveStateManager::SaveAll()
+void SaveStateManager::SaveAll(string saveFile)
 {
 	// Creating binary file
-	ofstream file{ _saveFile, std::ios::binary | std::ios::out };
+	ofstream file{ saveFile, std::ios::binary | std::ios::out };
 	for (auto& ss : _SaveStateList) {
 		// saving object id
 		unsigned int id = ss->GetSaveStateId();
@@ -65,11 +57,11 @@ unsigned int FindId(vector<SaveState*>& ss, unsigned int id) {
 	// not present 
 	return -1;
 }
-void SaveStateManager::LoadAll()
+void SaveStateManager::LoadAll(string loadFile)
 {
-	ifstream file{ _loadFile, std::ios::binary | std::ios::in };
+	ifstream file{ loadFile, std::ios::binary | std::ios::in };
 	if (!file.is_open()) {
-		printf("ERROR: No Load File %s", _loadFile.c_str()); fflush(stdout);
+		printf("ERROR: No Load File %s", loadFile.c_str()); fflush(stdout);
 		exit(0);
 	}
 
