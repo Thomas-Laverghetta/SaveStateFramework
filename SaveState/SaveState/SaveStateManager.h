@@ -2,23 +2,38 @@
 #include "SaveState.h"
 #include <vector>
 #include <map>
+#include <string>
+
+using namespace std;
 
 class SaveStateManager
 {
 public:
+	/* Initializes save state manager.*/
+	static void Init(string saveFile, string loadFile);
+
 	/* Registers SaveState with manager.*/
-	void Register(SaveState* ss);
+	static void Register(SaveState* ss);
 
 	/* Remove object from save list.*/
-	void UnRegister(SaveState* ss);
+	static void Unregister(SaveState* ss);
 
 	/* Saves all objects to file.*/
-	void SaveAll();
+	static void SaveAll();
 
 	/* Loads all objects from file.*/
-	void LoadAll();
+	static void LoadAll();
+
+	/* Registers Class for class mapping.
+	All SaveState Classes must create static */
+	static void RegisterClass(unsigned int classId, SaveState* obj);
+
+	/* Gets the save-state list.*/
+	static vector<SaveState*> GetSaveStateList();
 private:
-	std::vector<SaveState*> _SaveStateList;
-	std::map<unsigned int, SaveState*> _classMap;
+	static vector<SaveState*> _SaveStateList;
+	static map<unsigned int, SaveState*> _classMap;
+	static string _loadFile;
+	static string _saveFile;
 };
 
