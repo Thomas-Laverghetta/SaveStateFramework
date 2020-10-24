@@ -1,6 +1,13 @@
 #pragma once
+
+/*
+* Creator: Thomas J Laverghetta (tlave002@odu.edu)
+*/
+
+
 #include <fstream>
 #include <string>
+#include <vector>
 
 // Save State Class
 class SaveState {
@@ -47,3 +54,4 @@ void SaveStateLoad(std::string loadFile);
 
 /* Loads system states from load binary file*/
 void SaveStateSave(std::string saveFile);
+

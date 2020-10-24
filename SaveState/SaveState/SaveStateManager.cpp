@@ -1,3 +1,7 @@
+/*
+* Creator: Thomas J Laverghetta (tlave002@odu.edu)
+*/
+
 #include "SaveStateManager.h"
 #include <algorithm>
 
@@ -16,7 +20,7 @@ void SaveStateManager::Unregister(SaveState* ss)
 	_SaveStateList.erase(std::remove(_SaveStateList.begin(), _SaveStateList.end(), ss), _SaveStateList.end());
 }
 
-void SaveStateManager::SaveAll(string saveFile)
+void SaveStateManager::SaveAll(string& saveFile)
 {
 	// Creating binary file
 	ofstream file{ saveFile, std::ios::binary | std::ios::out };
@@ -58,7 +62,7 @@ unsigned int FindId(vector<SaveState*>& ss, unsigned int id) {
 	// not present 
 	return -1;
 }
-void SaveStateManager::LoadAll(string loadFile)
+void SaveStateManager::LoadAll(string& loadFile)
 {
 	ifstream file{ loadFile, std::ios::binary | std::ios::in };
 	if (!file.is_open()) {
@@ -66,9 +70,13 @@ void SaveStateManager::LoadAll(string loadFile)
 		exit(0);
 	}
 
-	while (!file.eof()) {
+	while (true) {
 		unsigned int objId;
 		file.read((char*)&objId, sizeof(objId));
+
+		if (file.eof()) {
+			break;
+		}
 
 		unsigned int classId;
 		file.read((char*)&classId, sizeof(classId));
@@ -94,12 +102,14 @@ void SaveStateManager::LoadAll(string loadFile)
 	}
 }
 
+std::vector<SaveState*> SaveStateManager::GetSaveStateList()
+{
+	return _SaveStateList;
+}
+
 void SaveStateManager::RegisterClass(unsigned int classId, NewFunctor newFunctor)
 {
 	_classMap[classId] = newFunctor;
 }
 
-std::vector<SaveState*> SaveStateManager::GetSaveStateList()
-{
-	return _SaveStateList;
-}
+

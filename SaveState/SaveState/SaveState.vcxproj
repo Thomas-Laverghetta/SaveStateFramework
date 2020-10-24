@@ -141,11 +141,13 @@
   <ItemGroup>
     <ClInclude Include="SaveState.h" />
     <ClInclude Include="SaveStateManager.h" />
+    <ClInclude Include="SaveStateTestHarness.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SaveState.cpp" />
     <ClCompile Include="SaveStateManager.cpp" />
+    <ClCompile Include="SaveStateTestHarness.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

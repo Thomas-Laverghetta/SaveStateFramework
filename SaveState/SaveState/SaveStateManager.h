@@ -1,4 +1,10 @@
 #pragma once
+
+/*
+* Creator: Thomas J Laverghetta (tlave002@odu.edu)
+*/
+
+
 #include "SaveState.h"
 #include <vector>
 #include <map>
@@ -9,9 +15,6 @@ using namespace std;
 class SaveStateManager
 {
 public:
-	/* Initializes save state manager.*/
-	static void Init();
-
 	/* Registers SaveState with manager.*/
 	static void Register(SaveState* ss);
 
@@ -19,10 +22,10 @@ public:
 	static void Unregister(SaveState* ss);
 
 	/* Saves all objects to file.*/
-	static void SaveAll(string saveFile);
+	static void SaveAll(string& saveFile);
 
 	/* Loads all objects from file.*/
-	static void LoadAll(string loadFile);
+	static void LoadAll(string& loadFile);
 
 	/* Registers Class for class mapping.
 	All SaveState Classes must create static */
@@ -34,4 +37,3 @@ private:
 	static vector<SaveState*> _SaveStateList;
 	static map<unsigned int, NewFunctor> _classMap;
 };
-

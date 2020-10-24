@@ -1,3 +1,7 @@
+/*
+* Creator: Thomas J Laverghetta (tlave002@odu.edu)
+*/
+
 #include "SaveState.h"
 #include "SaveStateManager.h"
 
@@ -28,3 +32,14 @@ void SaveStateClassRegister(unsigned int classId, NewFunctor newFunctor)
 {
 	SaveStateManager::RegisterClass(classId, newFunctor);
 }
+
+void SaveStateLoad(std::string loadFile) {
+	SaveStateManager::LoadAll(loadFile);
+}
+
+void SaveStateSave(std::string saveFile)
+{
+	SaveStateManager::SaveAll(saveFile);
+}
+
+
