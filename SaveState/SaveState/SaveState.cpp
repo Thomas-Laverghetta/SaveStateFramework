@@ -13,7 +13,10 @@ SaveState::SaveState(unsigned int classId) : _id(_nextId++), _classId(classId)
 }
 
 SaveState::SaveState(unsigned int classId, unsigned int id) : _id(id), _classId(classId)
-{}
+{
+	// setting next id
+	_nextId = _id + 1;
+}
 
 SaveState::~SaveState()
 {
@@ -21,7 +24,7 @@ SaveState::~SaveState()
 	SaveStateManager::Unregister(this);
 }
 
-void SaveStateClassRegister(unsigned int classId, SaveState* obj)
+void SaveStateClassRegister(unsigned int classId, NewFunctor newFunctor)
 {
-	SaveStateManager::RegisterClass(classId, obj);
+	SaveStateManager::RegisterClass(classId, newFunctor);
 }

@@ -34,6 +34,7 @@ void SaveStateManager::SaveAll(string saveFile)
 	}
 }
 
+// binary search for ID
 unsigned int FindId(vector<SaveState*>& ss, unsigned int id) {
 	unsigned int r = ss.size() - 1;
 	unsigned int l = 0;
@@ -81,14 +82,20 @@ void SaveStateManager::LoadAll(string loadFile)
 
 		// create dynamic state object
 		else {
-			_SaveStateList.push_back(_classMap.find(classId)->second->New(objId));
+			// calling static New(id) using function pointer
+			_SaveStateList.push_back(_classMap.find(classId)->second(objId));
 		}
+	}
+
+	// Repoint Any pointers
+	for (auto& ss: _SaveStateList){
+		ss->Repoint(_SaveStateList);
 	}
 }
 
-void SaveStateManager::RegisterClass(unsigned int classId, SaveState* obj)
+void SaveStateManager::RegisterClass(unsigned int classId, NewFunctor newFunctor)
 {
-	_classMap[classId] = obj;
+	_classMap[classId] = newFunctor;
 }
 
 std::vector<SaveState*> SaveStateManager::GetSaveStateList()

@@ -17,8 +17,8 @@ public:
 	/* Deserialize state-save child object from load-file.*/
 	virtual void Load(std::ifstream& loadFile) = 0;
 
-	/* Repoints SaveState objects to points using state object array (index == object id).*/
-	virtual void Repoint(SaveState* stateObjArr) = 0;
+	/* Repoints SaveState objects to points using state object array.*/
+	virtual void Repoint(const std::vector<SaveState*>& SaveStateList) = 0;
 
 	/* Gets State Save Object ID.*/
 	unsigned int GetSaveStateId() { return _id; }
@@ -27,7 +27,7 @@ public:
 	unsigned int GetSaveStateClassType() { return _classId; }
 
 	/* Creates a new state-save object with id specified.*/
-	virtual SaveState* New(unsigned int id) = 0;
+	// virtual SaveState* NewSaveObj(unsigned int id) = 0;
 
 	/* Unregisters with save state manager.*/
 	~SaveState();
@@ -38,10 +38,13 @@ private:
 	static unsigned int _nextId;
 };
 
+// Function pointer to static New Function that each class must create
+typedef SaveState* (*NewFunctor)(unsigned int);
+
 ///// Functions for SaveStateManager accessors
 
 /* Registers class with Save-State Manager*/
-void SaveStateClassRegister(unsigned int classId, SaveState* obj);
+void SaveStateClassRegister(unsigned int classId, NewFunctor newFunctor);
 
 /* Loads system states from load binary file*/
 void SaveStateLoad(std::string loadFile);

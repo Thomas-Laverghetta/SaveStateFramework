@@ -26,12 +26,12 @@ public:
 
 	/* Registers Class for class mapping.
 	All SaveState Classes must create static */
-	static void RegisterClass(unsigned int classId, SaveState* obj);
+	static void RegisterClass(unsigned int classId, NewFunctor newFunctor);
 
 	/* Gets the save-state list.*/
 	static vector<SaveState*> GetSaveStateList();
 private:
 	static vector<SaveState*> _SaveStateList;
-	static map<unsigned int, SaveState*> _classMap;
+	static map<unsigned int, NewFunctor> _classMap;
 };
 
