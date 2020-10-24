@@ -6,13 +6,13 @@ using namespace std;
 // initializing static variable next id
 unsigned int SaveState::_nextId = 0;
 
-SaveState::SaveState(unsigned int classId) : _id(_nextId++), _classId(classId) 
+SaveState::SaveState() : _id(_nextId++) 
 {
 	// Register with SaveStateManager
 	SaveStateManager::Register(this);
 }
 
-SaveState::SaveState(unsigned int classId, unsigned int id) : _id(id), _classId(classId)
+SaveState::SaveState(unsigned int id) : _id(id)
 {
 	// setting next id
 	_nextId = _id + 1;

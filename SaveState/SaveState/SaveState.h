@@ -6,10 +6,10 @@
 class SaveState {
 public:
 	/* Constuctor for SaveState objects.*/
-	SaveState(unsigned int classId);
+	SaveState();
 
 	/* Constuctor for SaveState when loading dynamic object.*/
-	SaveState(unsigned int classId, unsigned int id);
+	SaveState(unsigned int id);
 
 	/* Serialize state-save child object to save-file.*/
 	virtual void Save(std::ofstream& saveFile) = 0;
@@ -19,22 +19,18 @@ public:
 
 	/* Repoints SaveState objects to points using state object array.*/
 	virtual void Repoint(const std::vector<SaveState*>& SaveStateList) = 0;
+	
+	/* Returns class id associated with this object.*/
+	virtual unsigned int GetClassId() = 0;
 
 	/* Gets State Save Object ID.*/
 	unsigned int GetSaveStateId() { return _id; }
-
-	/* Gets State Save Object class ID.*/
-	unsigned int GetSaveStateClassType() { return _classId; }
-
-	/* Creates a new state-save object with id specified.*/
-	// virtual SaveState* NewSaveObj(unsigned int id) = 0;
 
 	/* Unregisters with save state manager.*/
 	~SaveState();
 private:
 	// State Save Identifier
 	unsigned int _id;
-	unsigned int _classId;
 	static unsigned int _nextId;
 };
 

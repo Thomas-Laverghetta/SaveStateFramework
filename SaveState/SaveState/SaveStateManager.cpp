@@ -3,7 +3,7 @@
 
 // Initializing Static Variables
 vector<SaveState*> SaveStateManager::_SaveStateList = vector<SaveState*>();
-map<unsigned int, SaveState*> SaveStateManager::_classMap = map<unsigned int, SaveState*>();
+map<unsigned int, NewFunctor> SaveStateManager::_classMap = map<unsigned int, NewFunctor>();
 
 void SaveStateManager::Register(SaveState* ss)
 {
@@ -26,7 +26,7 @@ void SaveStateManager::SaveAll(string saveFile)
 		file.write((char*)&id, sizeof(id));
 		
 		// saving class type
-		id = ss->GetSaveStateClassType();
+		id = ss->GetClassId();
 		file.write((char*)&id, sizeof(id));
 
 		// saving object
@@ -84,6 +84,7 @@ void SaveStateManager::LoadAll(string loadFile)
 		else {
 			// calling static New(id) using function pointer
 			_SaveStateList.push_back(_classMap.find(classId)->second(objId));
+			_SaveStateList.back()->Load(file);
 		}
 	}
 
