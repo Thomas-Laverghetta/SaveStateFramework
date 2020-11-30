@@ -9,6 +9,7 @@ using namespace std;
 
 // initializing static variable next id
 unsigned int SaveState::_nextId = 0;
+unsigned int SaveState::_nextSaveStateClassId = 0;
 
 SaveState::SaveState() : _id(_nextId++) 
 {
@@ -41,5 +42,3 @@ void SaveStateSave(std::string saveFile)
 {
 	SaveStateManager::SaveAll(saveFile);
 }
-
-
